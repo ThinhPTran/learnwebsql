@@ -1,7 +1,11 @@
 (defproject learnwebsql "0.1.0-SNAPSHOT"
+  :description "Learn to use WebSql"
+  :main learnwebsql.core
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.229"]
-                 [reagent "0.6.1"]]
+                 [reagent "0.6.1"]
+                 [io.replikativ/replikativ "0.2.1"]
+                 [datascript "0.16.1"]]
 
   :min-lein-version "2.5.3"
 

@@ -1,31 +1,28 @@
 (ns learnwebsql.core
-  (:require
-   [reagent.core :as reagent]))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; WebSql
-
-(def db
-  (.openDatabase js/window "Database" "1.0" "WebSql Example" 1024))
-
-(defn run)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Vars
-
-(defonce app-state
-  (reagent/atom {}))
-
+  (:require [reagent.core :as reagent]
+            [learnwebsql.db :as mydb]
+            [learnwebsql.events :as events]))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Page
 
-(defn page [ratom]
-  [:div
-   "Welcome to reagent-figwheel."])
+(defn userdatoms []
+  (let [datoms (:datoms @mydb/app-state)]
+    [:div
+     [:input
+      {:type "button"
+       :value "Add datom"
+       :on-click (fn [_]
+                   (events/addDatom))}]
+     [:div "Datoms: "]
+     [:ul
+      (for [datom datoms]
+        ^{:key datom} [:li (str datom)])]]))
 
+(defn page [ratom]
+  [:div "Welcome to reagent-figwheel."
+   [userdatoms]])
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -38,9 +35,11 @@
 
 
 (defn reload []
-  (reagent/render [page app-state]
+  (reagent/render [page mydb/app-state]
                   (.getElementById js/document "app")))
 
 (defn ^:export main []
   (dev-setup)
-  (reload))
+  (reload)
+  (mydb/setupclientdata)
+  (events/runtestwebsql))
